@@ -4,23 +4,18 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const Login = () => import('@/views/login/')
-const Demo = () => import('@/views/demo')
 const Home = () => import('@/views/home/')
 const Welcome = () => import('@/views/main/welcome.vue')
-const Users = () => import('@/views/main/users.vue')
-const Categories = () => import('@/views/main/categories.vue')
-const Goods = () => import('@/views/main/goods.vue')
-const Orders = () => import('@/views/main/orders.vue')
-const Params = () => import('@/views/main/params.vue')
-const Reports = () => import('@/views/main/reports.vue')
-const Rights = () => import('@/views/main/rights.vue')
-const Roles = () => import('@/views/main/roles.vue')
+const Users = () => import('@/views/main/users/')
+const Categories = () => import('@/views/main/categories')
+const Goods = () => import('@/views/main/goods/')
+const Orders = () => import('@/views/main/orders/')
+const Params = () => import('@/views/main/params/')
+const Reports = () => import('@/views/main/reports/')
+const Rights = () => import('@/views/main/rights/')
+const Roles = () => import('@/views/main/roles/')
 
 const routes = [
-  {
-    path: '/demo',
-    component: Demo
-  },
   {
     path: '/',
     redirect: '/login'

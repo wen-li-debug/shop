@@ -7,7 +7,7 @@
       :default-active="'/' + activePath "
       background-color="#333744"
       text-color="#fff"
-      active-text-color="#ffd04b"
+      active-text-color="#4B8AF1"
       unique-opened
       :collapse="isCollapse"
       :collapse-transition="false"
@@ -31,6 +31,7 @@
 
 <script>
 import { menusList } from '@/api/home'
+import '../../style/icon.css'
 
 export default {
   name: 'AsideIndex',
@@ -72,7 +73,6 @@ export default {
         })
         return
       }
-      console.log(data.data)
       this.menusLists = data.data
     },
     // 记录原来列表的path

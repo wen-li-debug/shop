@@ -99,8 +99,8 @@
 
 <script>
 import { users, myStatus, updateUserInfo, delUser } from '@/api/users'
-import UserAdd from './usersChildren/add'
-import UserUpdate from './usersChildren/update'
+import UserAdd from './children/add'
+import UserUpdate from './children/update'
 
 export default {
   name: 'MainIndex',
