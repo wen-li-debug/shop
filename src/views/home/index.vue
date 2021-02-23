@@ -1,43 +1,54 @@
 <template>
-  <div class="">
-    {{date | newDate('323')}}
-    <button @click="speak">点击</button>
-  </div>
+  <el-container>
+    <el-header class="header">
+      <header-index />
+    </el-header>
+    <el-container>
+      <el-aside class="aside" :width="isCollapse ? '64px': '200px'">
+        <aside-index :isCollapse="isCollapse" @iscolse="isCollapse = !isCollapse"/>
+      </el-aside>
+      <el-main class="main">
+        <router-view />
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script>
-import mixin1 from '@/utils/minix1'
+import HeaderIndex from '../header/'
+import AsideIndex from '../aside/'
 
 export default {
   name: 'HomeIndex',
-  components: {},
+  components: {
+    HeaderIndex,
+    AsideIndex
+  },
   props: {},
   data () {
     return {
-      date: '2012-01-12'
+      isCollapse: false
     }
   },
-  mixins: [mixin1],
   watch: {},
   computed: {},
-  filters: {
-    newDate (val, message) {
-      console.log(val, message)
-      return val + '11'
-    }
-  },
+  filters: {},
   created () {},
-  mounted () {
-    console.log('minixMounted1')
-    this.getData()
-    console.log(this.version)
-  },
-  methods: {
-    speak () {
-      console.log('this is minix1')
-    }
-  }
+  mounted () {},
+  methods: {}
 }
 </script>
 <style lang="less" scoped>
+.el-container{
+  height: 100%;
+}
+.header{
+  background-color: #373d41;
+}
+.aside{
+  background-color: #333744;
+}
+.main{
+  background-color: #eaedf1;
+}
 </style>

@@ -12,4 +12,12 @@ request.interceptors.response.use(res => {
   return Promise.reject(err)
 })
 
+// 请求拦截器
+request.interceptors.request.use(config => {
+  if (config.url === '/login') return config
+  const token = sessionStorage.getItem('token')
+  config.headers.Authorization = token
+  return config
+})
+
 export default request
