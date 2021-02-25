@@ -11,6 +11,7 @@ export default {
   props: {},
   data () {
     return {
+      message: '333'
     }
   },
   watch: {},

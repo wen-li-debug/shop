@@ -62,8 +62,8 @@
             <el-tooltip class="item" effect="dark" content="删除" placement="top-start" :enterable="false" >
             <el-button type="danger" icon="el-icon-delete" size="small" @click="delUserClick(scope.row.id)"></el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="分享" placement="top-start" :enterable="false">
-            <el-button type="warning" icon="el-icon-setting" size="small"></el-button>
+            <el-tooltip class="item" effect="dark" content="分配权限" placement="top-start" :enterable="false">
+            <el-button type="warning" icon="el-icon-setting" size="small" @click="setRolesClick(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -85,7 +85,8 @@
       :isAddUser="isAddUser"
       @upisAddUser="isAddUser = false"
       @addUser="addUser"
-      />
+      >
+      </user-add>
 
       <!-- 修改用户 -->
       <user-update
@@ -94,19 +95,30 @@
         :upDateUser="upDateUser"
         @closeUpdateUser="closeUpdateUser"
       />
+
+      <!-- 分配权限 -->
+      <set-roles
+        :showRolesVisible="showRolesVisible"
+        :userInfo="userInfo"
+        @showRoles="showRolesVisible = $event"
+        :rolesList="rolesList"
+        @addRolesClick="addRolesClick"
+      />
   </div>
 </template>
 
 <script>
-import { users, myStatus, updateUserInfo, delUser } from '@/api/users'
+import { users, myStatus, updateUserInfo, delUser, getRights, setRoles } from '@/api/users'
 import UserAdd from './children/add'
 import UserUpdate from './children/update'
+import SetRoles from './children/setRoles'
 
 export default {
-  name: 'MainIndex',
+  name: 'UserIndex',
   components: {
     UserAdd,
-    UserUpdate
+    UserUpdate,
+    SetRoles
   },
   props: {},
   data () {
@@ -124,16 +136,22 @@ export default {
       // 控制修改用户界面的显示和隐藏
       isUpdateUser: false,
       // 需要修改用户的数据
-      upDateUser: {}
+      upDateUser: {},
+      // 控制分配权限界面的显示和隐藏
+      showRolesVisible: false,
+      userInfo: {},
+      rolesList: []
     }
   },
   watch: {},
   computed: {},
   created () {
     this.getUsers()
+    console.log(this.$children)
   },
   mounted () {},
   methods: {
+    // 获取用户信息
     async getUsers () {
       const data = await users(this.queryInfo)
       if (data.meta.status !== 200) {
@@ -146,10 +164,12 @@ export default {
       this.usersData = data.data.users
       this.total = data.data.total
     },
+    // 改变每页的数量
     handleSizeChange (newSize) {
       this.queryInfo.pagesize = newSize
       this.getUsers()
     },
+    // 改变页码
     handleCurrentChange (newPage) {
       this.queryInfo.pagenum = newPage
       this.getUsers()
@@ -201,6 +221,23 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    // 显示分配权限
+    async setRolesClick (roles) {
+      this.userInfo = roles
+      const data = await getRights()
+      if (data.meta.status !== 200) return this.$message.error('请求失败，请稍后重试')
+      this.rolesList = data.data
+      this.showRolesVisible = true
+    },
+    // 分配权限
+    async addRolesClick (id) {
+      const data = await setRoles(this.userInfo.id, id)
+      console.log(data)
+      if (data.meta.status !== 200) return this.$message.error('请求失败，请稍后重试')
+      this.$message.success('设置角色成功')
+      this.getUsers()
+      this.showRolesVisible = false
     }
   }
 }

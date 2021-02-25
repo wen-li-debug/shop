@@ -12,8 +12,8 @@ const Goods = () => import('@/views/main/goods/')
 const Orders = () => import('@/views/main/orders/')
 const Params = () => import('@/views/main/params/')
 const Reports = () => import('@/views/main/reports/')
-const Rights = () => import('@/views/main/rights/')
-const Roles = () => import('@/views/main/roles/')
+const Rights = () => import('@/views/main/power/rights/')
+const Roles = () => import('@/views/main/power/roles/')
 
 const routes = [
   {

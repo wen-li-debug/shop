@@ -91,7 +91,9 @@ export default {
       }
     }
   },
-  created () {},
+  created () {
+    console.log(this.$root)
+  },
   mounted () {},
   methods: {
     closeClick () {

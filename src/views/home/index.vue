@@ -8,7 +8,9 @@
         <aside-index :isCollapse="isCollapse" @iscolse="isCollapse = !isCollapse"/>
       </el-aside>
       <el-main class="main">
-        <router-view />
+        <keep-alive include="UserIndex">
+          <router-view/>
+        </keep-alive>
       </el-main>
     </el-container>
   </el-container>

@@ -54,3 +54,22 @@ export const delUser = (id) => {
     url: `/users/${id}`
   })
 }
+
+// 获取所以权限
+export const getRights = () => {
+  return request({
+    mehtod: 'GET',
+    url: '/roles'
+  })
+}
+
+// 分配角色
+export const setRoles = (id, rid) => {
+  return request({
+    method: 'PUT',
+    url: `/users/${id}/role`,
+    data: {
+      rid
+    }
+  })
+}
