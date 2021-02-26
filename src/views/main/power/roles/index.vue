@@ -152,9 +152,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.el-table{
-  margin: 20px 0;
-}
 .el-row{
   padding: 10px;
 }

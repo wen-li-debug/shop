@@ -39,6 +39,9 @@ export default {
     isAddUser: {
       type: Boolean,
       default: false
+    },
+    name: {
+      type: String
     }
   },
   data () {

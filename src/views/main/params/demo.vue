@@ -1,12 +1,12 @@
 <template>
-  <div class="categories-container">
-    categories
+  <div class="">
+    fefe
   </div>
 </template>
 
 <script>
 export default {
-  name: 'CategoriesIndex',
+  name: '',
   components: {},
   props: {},
   data () {
