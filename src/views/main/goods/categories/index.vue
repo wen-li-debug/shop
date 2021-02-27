@@ -37,7 +37,7 @@
         @size-change="handleSizeCate"
         @current-change="handleCurrentCate"
         :current-page="queryInfo.pagenum"
-        :page-sizes="[1, 2, 3, 4]"
+        :page-sizes="[5, 10, 15, 20]"
         :page-size="queryInfo.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total">
