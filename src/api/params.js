@@ -40,3 +40,20 @@ export const editParams = (id, attrId, data) => {
     data
   })
 }
+
+// 删除参数属性
+export const delParams = (id, arrtId) => {
+  return request({
+    method: 'DELETE',
+    url: `/categories/${id}/attributes/${arrtId}`
+  })
+}
+
+// 跟新属性
+export const upAttr = (id, attrId, data) => {
+  return request({
+    method: 'PUT',
+    url: `/categories/${id}/attributes/${attrId}`,
+    data
+  })
+}

@@ -22,11 +22,11 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="动态参数" name="many">
           <el-button type="primary" size="mini" :disabled="isBtnDisable" @click="showParamsdialogVisible = true">添加参数</el-button>
-          <many-params :manyTableData="manyTableData" @editParams="editParams"/>
+          <many-params :manyTableData="manyTableData" @editParams="editParams" @delParams="delParams" @upAttr="upAttr"/>
         </el-tab-pane>
         <el-tab-pane label="静态属性" name="only">
           <el-button type="primary" size="mini" :disabled="isBtnDisable" @click="showParamsdialogVisible = true">添加属性</el-button>
-          <only-params :onlyTableData="onlyTableData" @editParams="editParams" />
+          <only-params :onlyTableData="onlyTableData" @editParams="editParams" @delParams="delParams"/>
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -50,7 +50,7 @@
 
 <script>
 import { catesList } from '@/api/goods'
-import { getParamsList, addParams, paramsData, editParams } from '@/api/params'
+import { getParamsList, addParams, paramsData, editParams, delParams, upAttr } from '@/api/params'
 import OnlyParams from './chilidren/onlyParams'
 import ManyParams from './chilidren/manyParams'
 import AddParams from './chilidren/addParams'
@@ -122,11 +122,22 @@ export default {
       if (this.paramsVal.length === 3) {
         const data = await getParamsList(this.paramsId, this.activeName)
         if (data.meta.status !== 200) return this.$message.error('请求失败，请稍后重试')
+        data.data.forEach(item => {
+          item.inputValue = ''
+          item.inputVisible = false
+          // 转化 arrt_vals 为数组
+          item.attr_vals = item.attr_vals ? item.attr_vals.split(' ') : []
+        })
         if (this.activeName === 'only') {
           this.onlyTableData = data.data
         } else {
+          // 添加inputValue 和 inputVisible 来操作属性标签
           this.manyTableData = data.data
         }
+      } else {
+        this.paramsVal = []
+        this.manyTableData = []
+        this.onlyTableData = []
       }
     },
     // 添加参数
@@ -152,6 +163,31 @@ export default {
       this.$message.success('修改参数属性成功')
       this.getTableData()
       this.showEditParamsdialogVisible = false
+    },
+    // 删除参数属性
+    async delParams (arrtId) {
+      const confirmResult = await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).catch(err => err)
+      if (confirmResult === 'cancel') return this.$message.info('已取消删除')
+      const data = await delParams(this.paramsVal[this.paramsVal.length - 1], arrtId)
+      console.log(data)
+      if (data.meta.status !== 200) return this.$message.error('请求失败，请稍后重试')
+      this.$message.success('删除参数属性成功')
+      this.getTableData()
+    },
+    // 更新属性
+    async upAttr (row) {
+      const data = await upAttr(this.paramsVal[this.paramsVal.length - 1], row.attr_id, {
+        attr_name: row.attr_name,
+        attr_sel: row.attr_sel,
+        attr_vals: row.attr_vals.join(' ')
+      })
+      console.log(data)
+      if (data.meta.status !== 200) return this.$message.error('请求失败，请稍后重试')
+      this.$message.success('更新参数属性成功')
     }
   }
 }
