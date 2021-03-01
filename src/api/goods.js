@@ -19,3 +19,20 @@ export const addCate = data => {
     data
   })
 }
+
+// 获取商品
+export const goodsList = params => {
+  return request({
+    method: 'GET',
+    url: '/goods',
+    params
+  })
+}
+
+// 删除商品
+export const delGoods = id => {
+  return request({
+    method: 'DELETE',
+    url: `goods/${id}`
+  })
+}

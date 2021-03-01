@@ -8,3 +8,6 @@
 html, body{
   min-width: 1300px;
 }
+.ql-editor{
+  min-height: 330px;
+}

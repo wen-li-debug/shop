@@ -111,7 +111,6 @@ export default {
       this.paramsList = data.data
     },
     handleChangeParams () {
-      console.log(this.paramsVal)
       this.getTableData()
     },
     handleClick () {
