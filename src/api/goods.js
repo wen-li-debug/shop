@@ -36,3 +36,12 @@ export const delGoods = id => {
     url: `goods/${id}`
   })
 }
+
+// 添加商品
+export const addGoods = data => {
+  return request({
+    method: 'POST',
+    url: '/goods',
+    data
+  })
+}

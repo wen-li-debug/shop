@@ -47,7 +47,7 @@
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="商品参数" name="1">
-            <el-form-item :label="item.attr_name" v-for="item in onlyTableData" :key="item.attr_id">
+            <el-form-item :label="item.attr_name" v-for="item in manyTableData" :key="item.attr_id">
               <el-checkbox-group v-model="item.attr_vals">
                 <el-checkbox :label="item1" v-for="(item1, id) in item.attr_vals" :key="id" border></el-checkbox>
               </el-checkbox-group>
@@ -96,7 +96,7 @@
 <script>
 // 用于深拷贝包
 import _ from 'lodash'
-import { catesList } from '@/api/goods'
+import { catesList, addGoods } from '@/api/goods'
 import { getParamsList } from '@/api/params'
 
 export default {
@@ -170,7 +170,6 @@ export default {
     // 获取商品分类数据
     async getCatesList () {
       const data = await catesList()
-      console.log(data)
       if (data.meta.status !== 200) return this.$message.error('请求数据失败，请稍后重试')
       this.catesList = data.data
     },
@@ -193,7 +192,6 @@ export default {
         this.manyTableData = data.data
       } else if (this.activeIndex === '2') {
         const data = await getParamsList(this.goodId, 'only')
-        console.log(data)
         if (data.meta.status !== 200) return this.$message.error('请求数据失败，请稍后重试')
         this.onlyTableData = data.data
       }
@@ -211,7 +209,6 @@ export default {
       // 获取删掉图片的索引
       const index = this.addGoodsForm.pics.findIndex(i => i.pic === delPath)
       this.addGoodsForm.pics.splice(index, 1)
-      console.log(this.addGoodsForm)
     },
     imgSuccess (response) {
       if (response.meta.status !== 200) return this.$message.error('请求失败，请稍后重试')
@@ -224,7 +221,7 @@ export default {
     },
     // 添加商品
     subClick () {
-      this.$refs.addGoodsRef.validate(valid => {
+      this.$refs.addGoodsRef.validate(async valid => {
         if (!valid) return this.$message.error('请填写相关参数信息')
         // 处理动态参数
         this.manyTableData.forEach(item => {
@@ -238,16 +235,22 @@ export default {
         this.onlyTableData.forEach(item => {
           const newInfo = {
             attr_id: item.attr_id,
-            attr_value: item.attr_vals.join(' ')
+            attr_value: item.attr_vals
           }
           this.addGoodsForm.attrs.push(newInfo)
         })
-        console.log(this.addGoodsForm)
         // 使用 loadsh 第三方包 深拷贝
         const form = _.cloneDeep(this.addGoodsForm)
         // 将goods_cat 转化为字符串
         form.goods_cat = form.goods_cat.join(',')
         console.log(form)
+        // 发送请求
+        const data = await addGoods(form)
+        console.log(data)
+        if (data.meta.status !== 201) return this.$message.error('请求失败，请稍后重试')
+        this.$message.success('添加商品成功')
+        // 跳转到商品列表
+        this.$router.push('/goods')
       })
     }
   }
